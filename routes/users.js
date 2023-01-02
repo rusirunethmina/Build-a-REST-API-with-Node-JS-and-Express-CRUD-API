@@ -1,21 +1,9 @@
 import express from "express";
+import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();
 
-const users = [
-  {
-    id: 1,
-    firstName: "rusiru",
-    lastName: "nethmina",
-    age: 24,
-  },
-  {
-    id: 2,
-    firstName: "kosala",
-    lastName: "dayaratyna",
-    age: 22,
-  },
-];
+const users = [];
 
 //all routes in here are starting with /users
 router.get("/", (req, res) => {
@@ -25,8 +13,16 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   const user = req.body;
-  users.push(user);
+  const userid = uuidv4();
+  const userWithId = { ...user, id: userid };
+  users.push(userWithId);
   res.send(`User name is ${user.firstName}`);
+});
+
+router.get("/:id", (req, res) => {
+  const { useriD } = req.params;
+  const userData = users.find((user) => user.id === useriD);
+  res.send(userData);
 });
 
 export default router;
